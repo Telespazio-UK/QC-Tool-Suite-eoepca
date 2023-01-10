@@ -18,7 +18,12 @@ spec:
       namespace: rm
     ingress:
       enabled: true
+      name: resource-catalogue
       host: resource-catalogue.192.168.49.2.nip.io
+      # we're not using tls, but the resource-catalogue helm chart insists on
+      # having values anyway - so may as well set consistent values
+      tls_host: resource-catalogue.192.168.49.2.nip.io
+      tls_secret_name: resource-catalogue-tls
       annotations:
         nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     db:
