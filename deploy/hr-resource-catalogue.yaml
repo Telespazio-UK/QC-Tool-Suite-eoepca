@@ -19,6 +19,8 @@ spec:
     ingress:
       enabled: true
       host: resource-catalogue.192.168.49.2.nip.io
+      annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     db:
       volume_storage_type: standard
     pycsw:
