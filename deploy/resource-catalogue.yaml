@@ -38,7 +38,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: resource-catalogue-zzz
+  name: resource-catalogue
   namespace: rm
   annotations:
     kubernetes.io/ingress.class: nginx
