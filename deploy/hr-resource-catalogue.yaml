@@ -1,0 +1,27 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: resource-catalogue
+  namespace: rm
+spec:
+  interval: 5m 
+  chart:
+    spec:
+      chart: rm-resource-catalogue
+      version: 1.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: eoepca
+        namespace: common
+  values:
+    global:
+      namespace: rm
+    ingress:
+      enabled: true
+      host: resource-catalogue.192.168.49.2.nip.io
+    db:
+      volume_storage_type: standard
+    pycsw:
+      config:
+        server:
+          url: http://resource-catalogue.192.168.49.2.nip.io/
