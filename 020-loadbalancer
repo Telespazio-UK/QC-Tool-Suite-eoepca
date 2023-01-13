@@ -16,7 +16,7 @@ helm install metallb metallb \
 
 # configure address pool
 # we have to wait for the controller to be ready for this...
-while [ $(kubectl -n metallb-system get deploy/metallb-controller -ojson | jq -r .status.readyReplicas) != 1 ]; do
+while [ $(kubectl -n metallb-system get deploy/metallb-controller -ojson | jq -r '.status.readyReplicas // 0') -lt 1 ]; do
   echo "Wating for loadbalancer readiness..."
   sleep 5
 done
