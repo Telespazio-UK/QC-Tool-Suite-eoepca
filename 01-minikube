@@ -9,4 +9,4 @@ onExit() {
 }
 trap onExit EXIT
 
-minikube start --cpus max --memory 8g --kubernetes-version "v1.22.5" --addons ingress
+minikube start --cpus max --memory 8g --kubernetes-version "v1.22.5"
