@@ -9,6 +9,8 @@ onExit() {
 }
 trap onExit EXIT
 
+export LB_ADDRESSES="${LB_ADDRESSES:-$(minikube ip)/32}"
+
 # install metallb
 helm install metallb metallb \
   --repo https://metallb.github.io/metallb \
@@ -30,7 +32,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-    - $(minikube ip)/32
+    - ${LB_ADDRESSES}
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
