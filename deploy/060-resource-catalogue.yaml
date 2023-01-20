@@ -21,10 +21,10 @@ spec:
       # which is not what we want, so disable the ingress and create it ourselves
       enabled: false
       # name: resource-catalogue
-      # host: resource-catalogue.192.168.49.2.nip.io
+      # host: resource-catalogue.192-168-49-2.nip.io
       # # we're not using tls, but the resource-catalogue helm chart insists on
       # # having values anyway - so may as well set consistent values
-      # tls_host: resource-catalogue.192.168.49.2.nip.io
+      # tls_host: resource-catalogue.192-168-49-2.nip.io
       # tls_secret_name: resource-catalogue-tls
       # annotations:
       #   nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
@@ -33,7 +33,7 @@ spec:
     pycsw:
       config:
         server:
-          url: http://resource-catalogue.192.168.49.2.nip.io/
+          url: http://resource-catalogue.192-168-49-2.nip.io/
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -47,7 +47,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
 spec:
   rules:
-  - host: resource-catalogue.192.168.49.2.nip.io
+  - host: resource-catalogue.192-168-49-2.nip.io
     http:
       paths:
       - backend:
