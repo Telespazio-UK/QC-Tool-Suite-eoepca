@@ -16,7 +16,7 @@ if [ -z "${GITHUB_USER}" -o -z "${GITHUB_TOKEN}" ]; then
 fi
 
 export GITHUB_REPO="${GITHUB_REPO:-eoepca-flux}"
-export GITHUB_BRANCH="${GITHUB_BRANCH:-main}"
+export GITHUB_BRANCH="${GITHUB_BRANCH:-deployment-guide}"
 export GITHUB_PATH="${GITHUB_PATH:-deploy}"
 
 flux bootstrap github \
