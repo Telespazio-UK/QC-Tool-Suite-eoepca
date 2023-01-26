@@ -6,4 +6,4 @@ resources:
   - 030-helm-repositories.yaml
   - 040-nfs-provisioner.yaml
   - 050-storage-volumes.yaml
-  - 060-resource-catalogue.yaml
+  # - 060-resource-catalogue.yaml
