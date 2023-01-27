@@ -58,7 +58,7 @@ spec:
       #       name: resource-catalogue-service
       #       port:
       #         number: 80
-      - path: /resource-catalogue(.*)
+      - path: /resource-catalogue/(.*)
         pathType: Prefix
         backend:
           service:
