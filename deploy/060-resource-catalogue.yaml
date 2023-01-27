@@ -46,20 +46,22 @@ metadata:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite ^(/resource-catalogue)$ $1/ redirect;
 spec:
   rules:
   - host: 185-52-193-246.nip.io
     http:
       paths:
-      - path: /resource-catalogue$
-        pathType: Exact
+      - path: /resource-catalogue/(.*)
+        pathType: Prefix
         backend:
           service:
             name: resource-catalogue-service
             port:
               number: 80
-      - path: /resource-catalogue/(.*)
-        pathType: Prefix
+      - path: /resource-catalogue$
+        pathType: Exact
         backend:
           service:
             name: resource-catalogue-service
