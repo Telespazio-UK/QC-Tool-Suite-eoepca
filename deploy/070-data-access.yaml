@@ -962,3 +962,10 @@ spec:
                 name: data-access-client
                 port:
                   number: 80
+          - path: /data-access$
+            pathType: Exact
+            backend:
+              service:
+                name: data-access-client
+                port:
+                  number: 80
