@@ -73,14 +73,9 @@ spec:
       #-------------------------------------------------------------------------
       # global.ingress
       #-------------------------------------------------------------------------
-      # The data-access relies on the value 'ingress.tls.hosts[0]' to specify the service
-      # hostname. So this must be supplied even if the ingress is disabled.
       ingress:
         enabled: false # ${OPEN_INGRESS}
-        tls:
-          - hosts:
-              - 185-52-193-246.nip.io # ${name}.${domain}
-
+        
       #-------------------------------------------------------------------------
       # global.storage
       #-------------------------------------------------------------------------
@@ -864,6 +859,7 @@ spec:
         ingress:
           enabled: false
         config:
+          serviceUrl: "//185-52-193-246.nip.io/data-access/"
           eoxserverDownloadEnabled: true
           timeDomain:
             - "2002-01-01T00:00:00Z"
