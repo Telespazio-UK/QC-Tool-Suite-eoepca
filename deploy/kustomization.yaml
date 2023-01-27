@@ -7,3 +7,4 @@ resources:
   # - 040-nfs-provisioner.yaml
   - 050-storage-volumes.yaml
   - 060-resource-catalogue.yaml
+  - 070-data-access.yaml
