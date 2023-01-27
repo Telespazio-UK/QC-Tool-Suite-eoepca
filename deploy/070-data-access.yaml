@@ -781,7 +781,7 @@ spec:
       # vs.renderer
       #-------------------------------------------------------------------------
       renderer:
-        replicaCount: 1
+        replicaCount: 4
         ingress:
           enabled: false
         resources:
