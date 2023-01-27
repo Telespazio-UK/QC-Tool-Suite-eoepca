@@ -51,13 +51,13 @@ spec:
   - host: 185-52-193-246.nip.io
     http:
       paths:
-      # - path: /resource-catalogue$
-      #   pathType: Exact
-      #   backend:
-      #     service:
-      #       name: resource-catalogue-service
-      #       port:
-      #         number: 80
+      - path: /resource-catalogue$
+        pathType: Exact
+        backend:
+          service:
+            name: resource-catalogue-service
+            port:
+              number: 80
       - path: /resource-catalogue/(.*)
         pathType: Prefix
         backend:
