@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: resource-guard
-      version: 1.2.1
+      version: 1.2.3
       sourceRef:
         kind: HelmRepository
         name: eoepca
@@ -48,8 +48,7 @@ spec:
       nginxIntegration:
         enabled: true
         hosts:
-          - host: 185-52-193-246.nip.io
-            paths:
+          - paths:
               - path: /resource-catalogue/(.*)
                 pathType: Prefix
                 service:
@@ -65,7 +64,7 @@ spec:
           nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
           nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
           nginx.ingress.kubernetes.io/rewrite-target: /$1
-          nginx.ingress.kubernetes.io/configuration-snippet-zzz: |
+          nginx.ingress.kubernetes.io/configuration-snippet: |
             rewrite ^(/resource-catalogue)$ $1/ redirect;
       client:
         credentialsSecretName: "resman-client"
