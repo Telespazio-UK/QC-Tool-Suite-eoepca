@@ -8,4 +8,4 @@ resources:
   - 050-storage-volumes.yaml
   - 060-resource-catalogue.yaml
   - 065-resource-catalogue-guard.yaml
-  # - 070-data-access.yaml
+  - 070-data-access.yaml
