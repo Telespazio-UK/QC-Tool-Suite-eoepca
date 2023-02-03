@@ -905,7 +905,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: data-access
+  name: data-access-open
   namespace: rm
   annotations:
     kubernetes.io/ingress.class: nginx
@@ -914,55 +914,55 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/configuration-snippet: |
-      rewrite ^(/data-access)$ $1/ redirect;
+      rewrite ^(/data-access-open)$ $1/ redirect;
 spec:
   rules:
     - host: 185-52-193-246.nip.io
       http:
         paths:
-          - path: /data-access/(ows.*)
+          - path: /data-access-open/(ows.*)
             pathType: Prefix
             backend:
               service:
                 name: data-access-renderer
                 port:
                   number: 80
-          - path: /data-access/(opensearch.*)
+          - path: /data-access-open/(opensearch.*)
             pathType: Prefix
             backend:
               service:
                 name: data-access-renderer
                 port:
                   number: 80
-          - path: /data-access/(coverages/metadata.*)
+          - path: /data-access-open/(coverages/metadata.*)
             pathType: Prefix
             backend:
               service:
                 name: data-access-renderer
                 port:
                   number: 80
-          - path: /data-access/(admin.*)
+          - path: /data-access-open/(admin.*)
             pathType: Prefix
             backend:
               service:
                 name: data-access-renderer
                 port:
                   number: 80
-          - path: /data-access/cache/(.*)
+          - path: /data-access-open/cache/(.*)
             pathType: Prefix
             backend:
               service:
                 name: data-access-cache
                 port:
                   number: 80
-          - path: /data-access/(.*)
+          - path: /data-access-open/(.*)
             pathType: Prefix
             backend:
               service:
                 name: data-access-client
                 port:
                   number: 80
-          - path: /data-access$
+          - path: /data-access-open$
             pathType: Exact
             backend:
               service:
