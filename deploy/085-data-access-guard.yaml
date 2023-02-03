@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: resource-catalogue-guard
+  name: data-access-guard
   namespace: rm
 spec:
   chart:
@@ -17,7 +17,7 @@ spec:
     # Global values
     #---------------------------------------------------------------------------
     global:
-      context: resource-catalogue
+      context: data-access
       domain: 185-52-193-246.nip.io
       nginxIp: 185.52.193.246
       # certManager:
@@ -49,23 +49,62 @@ spec:
         enabled: true
         hosts:
           - paths:
-              - path: /resource-catalogue/(.*)
-                pathType: Prefix
+            - path: /data-access/(ows.*)
+              pathType: Prefix
+              backend:
                 service:
-                  name: resource-catalogue-service
-                  port: 80
-              - path: /resource-catalogue$
-                pathType: Exact
+                  name: data-access-renderer
+                  port:
+                    number: 80
+            - path: /data-access/(opensearch.*)
+              pathType: Prefix
+              backend:
                 service:
-                  name: resource-catalogue-service
-                  port: 80
+                  name: data-access-renderer
+                  port:
+                    number: 80
+            - path: /data-access/(coverages/metadata.*)
+              pathType: Prefix
+              backend:
+                service:
+                  name: data-access-renderer
+                  port:
+                    number: 80
+            - path: /data-access/(admin.*)
+              pathType: Prefix
+              backend:
+                service:
+                  name: data-access-renderer
+                  port:
+                    number: 80
+            - path: /data-access/cache/(.*)
+              pathType: Prefix
+              backend:
+                service:
+                  name: data-access-cache
+                  port:
+                    number: 80
+            - path: /data-access/(.*)
+              pathType: Prefix
+              backend:
+                service:
+                  name: data-access-client
+                  port:
+                    number: 80
+            - path: /data-access$
+              pathType: Exact
+              backend:
+                service:
+                  name: data-access-client
+                  port:
+                    number: 80
         annotations:
           nginx.ingress.kubernetes.io/enable-cors: "true"
           nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
           nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
           nginx.ingress.kubernetes.io/rewrite-target: /$1
           nginx.ingress.kubernetes.io/configuration-snippet: |
-            rewrite ^(/resource-catalogue)$ $1/ redirect;
+            rewrite ^(/data-access)$ $1/ redirect;
       client:
         credentialsSecretName: "resman-client"
       logging:
@@ -78,12 +117,3 @@ spec:
 
   timeout: 25m0s
   interval: 1m0s
----
-apiVersion: v1
-kind: Secret
-type: Opaque
-metadata:
-  name: resman-client
-  namespace: rm
-data:
-  client.yaml: Y2xpZW50LWlkOiBkdW1teS1jbGllbnQtaWQKY2xpZW50LXNlY3JldDogZHVtbXktY2xpZW50LXNlY3JldA==
