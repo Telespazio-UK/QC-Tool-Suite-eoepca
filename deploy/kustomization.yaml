@@ -9,3 +9,4 @@ resources:
   - 060-resource-catalogue.yaml
   - 065-resource-catalogue-guard.yaml
   - 070-data-access.yaml
+  - 075-data-access-guard.yaml
