@@ -12,7 +12,7 @@ trap onExit EXIT
 minikube start \
   --cpus max \
   --memory 28g \
-  --listen-address=0.0.0.0 \
-  --ports=:80:80,443:443 \
+  --ports=80:80,443:443 \
   --kubernetes-version "v1.22.5"
+  # --listen-address=0.0.0.0
   # --addons ingress
