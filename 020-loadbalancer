@@ -9,10 +9,11 @@ onExit() {
 }
 trap onExit EXIT
 
-export LB_ADDRESSES="${LB_ADDRESSES:-$(minikube ip)/32}"
+# export LB_ADDRESSES="${LB_ADDRESSES:-$(minikube ip)/32}"
+export LB_ADDRESSES="172.26.59.13/32"
 
 # install metallb
-helm install metallb metallb \
+helm upgrade -i metallb metallb \
   --repo https://metallb.github.io/metallb \
   --namespace metallb-system --create-namespace
 
@@ -28,7 +29,7 @@ cat - <<EOF | kubectl apply -f -
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: minikube-pool
+  name: qctool-pool
   namespace: metallb-system
 spec:
   addresses:
@@ -37,9 +38,9 @@ spec:
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
-  name: minikube-loadbalancer
+  name: qctool-loadbalancer
   namespace: metallb-system
 spec:
   ipAddressPools:
-    - minikube-pool
+    - qctool-pool
 EOF
