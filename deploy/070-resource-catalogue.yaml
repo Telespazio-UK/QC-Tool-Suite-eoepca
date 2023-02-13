@@ -8,10 +8,10 @@ spec:
   chart:
     spec:
       chart: rm-resource-catalogue
-      version: 1.2.0
+      version: 1.2.1
       sourceRef:
         kind: HelmRepository
-        name: eoepca
+        name: eoepca-dev
         namespace: common
   values:
     global:
@@ -19,13 +19,15 @@ spec:
     ingress:
       # the resource-catalogue helm charts insists on configuring tls,
       # which is not what we want, so disable the ingress and create it ourselves
-      enabled: false
-      # name: resource-catalogue
-      # host: resource-catalogue.185-52-193-246.nip.io
-      # # we're not using tls, but the resource-catalogue helm chart insists on
-      # # having values anyway - so may as well set consistent values
-      # tls_host: resource-catalogue.185-52-193-246.nip.io
-      # tls_secret_name: resource-catalogue-tls
+      enabled: true
+      name: resource-catalogue
+      host: 185-52-193-246.nip.io
+      subpath_enabled: true
+      subpath: "/resource-catalogue"
+      # we're not using tls, but the resource-catalogue helm chart insists on
+      # having values anyway - so may as well set consistent values
+      tls_host: 185-52-193-246.nip.io
+      tls_secret_name: resource-catalogue-tls
       # annotations:
       #   nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     db:
