@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: rm-resource-catalogue
-      version: 1.2.1
+      version: 1.2.2
       sourceRef:
         kind: HelmRepository
         name: eoepca-dev
@@ -26,10 +26,10 @@ spec:
       subpath: "/resource-catalogue"
       # we're not using tls, but the resource-catalogue helm chart insists on
       # having values anyway - so may as well set consistent values
-      tls_host: 185-52-193-246.nip.io
-      tls_secret_name: resource-catalogue-tls
-      # annotations:
-      #   nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+      # tls_host: 185-52-193-246.nip.io
+      # tls_secret_name: resource-catalogue-tls
+      annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     db:
       volume_storage_type: standard
     pycsw:
