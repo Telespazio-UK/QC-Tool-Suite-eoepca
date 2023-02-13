@@ -7,7 +7,7 @@ resources:
   - 040-nfs-provisioner.yaml
   - 050-storage-volumes.yaml
   # - 060-rm-client-secret.yaml
-  # - 070-resource-catalogue.yaml
+  - 070-resource-catalogue.yaml
   # - 075-resource-catalogue-guard.yaml
   # - 080-data-access.yaml
   # - 085-data-access-guard.yaml
