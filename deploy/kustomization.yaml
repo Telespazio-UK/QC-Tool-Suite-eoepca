@@ -4,7 +4,7 @@ resources:
   - 010-ingress-nginx.yaml
   - 020-namespaces.yaml
   - 030-helm-repositories.yaml
-  # - 040-nfs-provisioner.yaml
+  - 040-nfs-provisioner.yaml
   # - 050-storage-volumes.yaml
   # - 060-rm-client-secret.yaml
   # - 070-resource-catalogue.yaml
