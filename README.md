@@ -5,6 +5,8 @@ Simple deployment of EOEPCA using flux.
 Defaults to a minikube cluster, but this can be adapted to any suitable Kubernetes cluster.
 
 - [eoepca-flux](#eoepca-flux)
+  - [Accessing from TPZ-UK Dev VM](#accessing-from-tpz-uk-dev-vm)
+  - [Prerequisite Tooling](#prerequisite-tooling)
   - [Deployment](#deployment)
     - [Kubernetes Cluster](#kubernetes-cluster)
     - [Loadbalancer](#loadbalancer)
@@ -15,32 +17,69 @@ Defaults to a minikube cluster, but this can be adapted to any suitable Kubernet
       - [NFS Provisioning](#nfs-provisioning)
       - [Storage Volumes](#storage-volumes)
       - [Resource Catalogue](#resource-catalogue)
+  - [Load Records into Resource Catalogue](#load-records-into-resource-catalogue)
+
+## Accessing from TPZ-UK Dev VM
+
+The cluster comprises 4 nodes - only one (`172.26.59.13`) is accessible from the TPZ-UK dev VM network - and only via SSH...
+
+* `172.26.59.13`
+  * Cluster access node
+  * NFS server
+  * Cluster roles: master, worker
+* `172.26.59.10`
+  * Accessible only from `172.26.59.13`
+  * Cluster roles: worker
+* `172.26.59.11`
+  * Accessible only from `172.26.59.13`
+  * Cluster roles: worker
+* `172.26.59.12`
+  * Accessible only from `172.26.59.13`
+  * Cluster roles: worker
+
+**Thus, all interactions with the cluster are made via node `172.26.59.13`. Specifically the steps described in this README are performed on the node `172.26.59.13`.**
+
+Connection is via SSH...
+```
+ssh -X rke@172.26.59.13
+```
+
+Use of the option `-X` allows the browser to be invoked on this access VM, and displayed on the connecting dev VM. This is necessary to establish a browser session that is able to connect to the cluster services, _(since the VM `172.26.59.13` does not allow traffic on `http` ports)_.
+
+For example... (from your dev VM)
+```
+ssh -X rke@172.26.59.13 google-chrome
+```
+
+This browser instance can then be used to interact with the web services of the cluster deployment.
 
 ## Prerequisite Tooling
 
+_On the node `172.26.59.13`_
+
 The deployment relies upon the following prerequisite tooling, with supporting scripts to facilitate their installation...
 
-* docker<br>
+* **docker**<br>
   ```
   ./bin/install-docker
   ```
 
-* rke<br>
+* **rke**<br>
   ```
   ./bin/install-rke
   ```
 
-* kubectl<br>
+* **kubectl**<br>
   ```
   ./bin/install-kubectl
   ```
 
-* helm<br>
+* **helm**<br>
   ```
   ./bin/install-helm
   ```
 
-* flux<br>
+* **flux**<br>
   ```
   ./bin/install-flux
   ```
@@ -48,6 +87,8 @@ The deployment relies upon the following prerequisite tooling, with supporting s
 Use the scripts to install the tooling as required.
 
 ## Deployment
+
+_On the node `172.26.59.13`_
 
 The deployment is made by a sequence of steps, to be executed in order, that are described in the following sub-sections...
 
@@ -182,41 +223,9 @@ In this deployment we are assuming a 'closed' deployment that is not externally 
 > NOTE<br>
 > The file `070-resource-catalogue.yaml` must be edited to set the correct domain for your deployment within the service and ingress definition. In this case it has been initialised with the value `172-26-59-13.nip.io` that resolves to the IP address of the 'accessible' node within the TPZ-UK cluster.
 
-## Accessing from TPZ-UK Dev VM
-
-The cluster comprises 4 nodes - only one (`172.26.59.13`) is accessible from the TPZ-UK dev VM network - and only via SSH...
-
-* `172.26.59.13`
-  * Cluster access node
-  * NFS server
-  * Cluster roles: master, worker
-* `172.26.59.10`
-  * Accessible only from `172.26.59.13`
-  * Cluster roles: worker
-* `172.26.59.11`
-  * Accessible only from `172.26.59.13`
-  * Cluster roles: worker
-* `172.26.59.12`
-  * Accessible only from `172.26.59.13`
-  * Cluster roles: worker
-
-Thus, all interactions with the cluster are made via node `172.26.59.13`. Specifically the steps described in this README are performed on the node `172.26.59.13`.
-
-Connection is via SSH...
-```
-ssh -X rke@172.26.59.13
-```
-
-Use of the option `-X` allows the browser to be invoked on this access VM, and displayed on the connecting dev VM. This is necessary to establish a browser session that is able to connect to the cluster services, _(since the VM `172.26.59.13` does not allow traffic on `http` ports)_.
-
-For example... (from your dev VM)
-```
-ssh -X rke@172.26.59.13 google-chrome
-```
-
-This browser instance can then be used to interact with the web services of the cluster deployment.
-
 ## Load Records into Resource Catalogue
+
+_On the node `172.26.59.13`_
 
 Records can be loaded into the Resource Catalogue from STAC Item inputs files.
 
