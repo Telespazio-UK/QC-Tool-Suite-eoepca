@@ -13,6 +13,7 @@ trap onExit EXIT
 main() {
   rke_config
   rke up
+  summary
 }
 
 rke_config() {
@@ -41,6 +42,19 @@ nodes:
 
 ingress:
   provider: none
+EOF
+}
+
+summary() {
+  cat - <<EOF
+
+The kubeconfig for the new cluster is in the file kube_config_cluster.yml
+Set environment variable KUBECONFIG to point to the new cluster...
+
+  export KUBECONFIG="${PWD}/kube_config_cluster.yml"
+
+This can be placed in your \${HOME}/.bashrc file.
+
 EOF
 }
 
