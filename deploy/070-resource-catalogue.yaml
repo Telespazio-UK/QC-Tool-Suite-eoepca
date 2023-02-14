@@ -17,8 +17,6 @@ spec:
     global:
       namespace: rm
     ingress:
-      # the resource-catalogue helm charts insists on configuring tls,
-      # which is not what we want, so disable the ingress and create it ourselves
       enabled: true
       name: resource-catalogue
       host: 185-52-193-246.nip.io
@@ -26,8 +24,8 @@ spec:
       subpath: "/resource-catalogue"
       # we're not using tls, but the resource-catalogue helm chart insists on
       # having values anyway - so may as well set consistent values
-      # tls_host: 185-52-193-246.nip.io
-      # tls_secret_name: resource-catalogue-tls
+      tls_host: 185-52-193-246.nip.io
+      tls_secret_name: resource-catalogue-tls
       annotations:
         nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     db:
