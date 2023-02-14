@@ -34,36 +34,36 @@ spec:
       config:
         server:
           url: http://185-52-193-246.nip.io/resource-catalogue/
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: resource-catalogue-open
-#   namespace: rm
-#   annotations:
-#     kubernetes.io/ingress.class: nginx
-#     nginx.ingress.kubernetes.io/enable-cors: "true"
-#     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-#     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-#     nginx.ingress.kubernetes.io/rewrite-target: /$1
-#     nginx.ingress.kubernetes.io/configuration-snippet: |
-#       rewrite ^(/resource-catalogue-open)$ $1/ redirect;
-# spec:
-#   rules:
-#   - host: 185-52-193-246.nip.io
-#     http:
-#       paths:
-#       - path: /resource-catalogue-open/(.*)
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: resource-catalogue-service
-#             port:
-#               number: 80
-#       - path: /resource-catalogue-open$
-#         pathType: Exact
-#         backend:
-#           service:
-#             name: resource-catalogue-service
-#             port:
-#               number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: resource-catalogue-open
+  namespace: rm
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite ^(/resource-catalogue-open)$ $1/ redirect;
+spec:
+  rules:
+  - host: 185-52-193-246.nip.io
+    http:
+      paths:
+      - path: /resource-catalogue-open/(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: resource-catalogue-service
+            port:
+              number: 80
+      - path: /resource-catalogue-open$
+        pathType: Exact
+        backend:
+          service:
+            name: resource-catalogue-service
+            port:
+              number: 80
