@@ -181,3 +181,17 @@ In this deployment we are assuming a 'closed' deployment that is not externally 
 
 > NOTE<br>
 > The file `070-resource-catalogue.yaml` must be edited to set the correct domain for your deployment within the service and ingress definition. In this case it has been initialised with the value `172-26-59-13.nip.io` that resolves to the IP address of the 'accessible' node within the TPZ-UK cluster.
+
+## Load Records into Resource Catalogue
+
+Records can be loaded into the Resource Catalogue from STAC Item inputs files.
+
+The helper script [`./bin/load-records`](./bin/load-records) has been included to facilitate this.
+
+The following included example illustrates...
+
+```
+./bin/load-records ./records/absolute-sea-level-heights-baltics-sar-hsu.json
+```
+
+After the record is loaded it can be http://resource-catalogue.172-26-59-13.nip.io/collections/metadata:main/items/absolute-sea-level-heights-baltics-sar-hsu here - [http://resource-catalogue.172-26-59-13.nip.io/collections/metadata:main/items/absolute-sea-level-heights-baltics-sar-hsu](http://resource-catalogue.172-26-59-13.nip.io/collections/metadata:main/items/absolute-sea-level-heights-baltics-sar-hsu)
