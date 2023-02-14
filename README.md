@@ -1,8 +1,6 @@
 # eoepca-flux
 
-Simple deployment of EOEPCA using flux.
-
-Defaults to a minikube cluster, but this can be adapted to any suitable Kubernetes cluster.
+Deployment of selected EOEPCA components to TPZ-UK internal cluster.
 
 - [eoepca-flux](#eoepca-flux)
   - [Accessing from TPZ-UK Dev VM](#accessing-from-tpz-uk-dev-vm)
