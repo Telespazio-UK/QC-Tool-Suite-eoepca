@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+ORIG_DIR="$(pwd)"
+cd "$(dirname "$0")"
+BIN_DIR="$(pwd)"
+
+onExit() {
+  cd "${ORIG_DIR}"
+}
+trap onExit EXIT
+
+curl -sfLo docker.sh https://get.docker.com
+chmod +x docker.sh
+
+export VERSION=20.10
+./docker.sh
+rm -f ./docker.sh
