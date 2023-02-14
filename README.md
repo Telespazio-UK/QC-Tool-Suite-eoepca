@@ -16,6 +16,37 @@ Defaults to a minikube cluster, but this can be adapted to any suitable Kubernet
       - [Storage Volumes](#storage-volumes)
       - [Resource Catalogue](#resource-catalogue)
 
+## Prerequisite Tooling
+
+The deployment relies upon the following prerequisite tooling, with supporting scripts to facilitate their installation...
+
+* docker<br>
+  ```
+  ./bin/install-docker
+  ```
+
+* rke<br>
+  ```
+  ./bin/install-rke
+  ```
+
+* kubectl<br>
+  ```
+  ./bin/install-kubectl
+  ```
+
+* helm<br>
+  ```
+  ./bin/install-helm
+  ```
+
+* flux<br>
+  ```
+  ./bin/install-flux
+  ```
+
+Use the scripts to install the tooling as required.
+
 ## Deployment
 
 The deployment is made by a sequence of steps, to be executed in order, that are described in the following sub-sections...
@@ -25,25 +56,37 @@ The deployment is made by a sequence of steps, to be executed in order, that are
 > NOTE<br>
 > This step can be skipped if you already have a Kubernetes cluster prepared.
 
-The script [`010-minikube`](./010-minikube) establishes a new minikube cluster as a starting point.
+The script [`010-kubernetes`](./010-kubernetes) establishes a new Kubernetes cluster using [Rancher Kubernetes Engine (RKE)](https://www.rancher.com/products/rke) as a starting point.
 
 ```bash
-./010-minikube
+./010-kubernetes
 ```
+
+The kubeconfig for the new cluster is in the file `kube_config_cluster.yml`.
+
+Set environment variable `KUBECONFIG` to point to the new cluster...
+```
+  export KUBECONFIG="<path-to-file>/kube_config_cluster.yml"
+```
+This can be placed in your `${HOME}/.bashrc` file.
 
 ### Loadbalancer
 
 > NOTE<br>
 > This step can be skipped if you already have a Loadbalancer - e.g. provided by your cloud environment - or you have a another means of establishing the 'access' IP to your cluster.
 
-The script [`020-loadbalancer`](./020-loadbalancer) deploys the metallb loadbalancer into the cluster - configured with an address pool that comprises the single 'minikube' IP address - ref. `$ minikube ip`.
+The script [`020-loadbalancer`](./020-loadbalancer) deploys the metallb loadbalancer into the cluster - configured with an address pool that comprises the IP address of the node `172.26.59.13` in the cluster - this node, importantly, being the only one that is accessible from the TPZ-UK dev VM network.
+
+This IP will be assigned to the `ingress-nginx` component within the cluster, through which all published cluster services will be exposed. Thus, a 'public' IP is presented by the cluster that is, at least, accessible from the dev VMs that can run a browser.
 
 ```bash
 ./020-loadbalancer
 ```
 
+The resultant domain through which the cluster public services are accessed is `172-26-59-13.nip.io` which resolves to the 'accessible' VM of the TPZ-UK cluster - e.g. `my-service.172-26-59-13.nip.io`.
+
 > NOTE<br>
-> If you are not using minikube then the script must be edited to set your cluster access IP address...
+> For a custom configuration, the script must be edited to set your cluster access IP address...
 > ```
 > spec:
 >   addresses:
@@ -108,14 +151,19 @@ Two `storage classes` are configured...
 * `managed-nfs-storage` - with a reclaim policy of `Delete`
 * `managed-nfs-storage-retain` - with a reclaim policy of `Retain`
 
-The file `040-nfs-provisioner.yaml` must be edited to set the IP address of the NFS server and the path to the exported directory to host the dynamically created volumes.
+The file `040-nfs-provisioner.yaml` must be edited to set the IP address of the NFS server and the path to the exported directory to host the dynamically created volumes. This has been preconfigured with the address and path of the NFS server VM...
+
+```
+    nfs:
+      server: "172.26.59.13"
+      path: /data/dynamic
+```
 
 > NOTE<br>
-> Since the default 'minikube' deployment is not accompanied by an NFS server, this capability is 'suspended' by default.<br>
-> Thus, to enable, the file must be edited to set...
+> If NFS support is not required then this capability can be suspended by editing...
 > ```
 > spec:
->   suspend: false
+>   suspend: true
 > ```
 
 #### Storage Volumes
@@ -123,13 +171,13 @@ The file `040-nfs-provisioner.yaml` must be edited to set the IP address of the 
 The file [`050-storage-volumes.yaml`](./deploy/050-storage-volumes.yaml) pre-creates persistent volume claims that can be used by other components.
 
 > NOTE<br>
-> By default the storage class `standard` is specfied - which relies upon the `k8s.io/minikube-hostpath` that is deployed with minikube. This must be adapted to a suitable storage class for your cluster - e.g. `managed-nfs-storage` is NFS provisioning has been configured.
+> By default the storage class `managed-nfs-storage-retain` is specfied - which relies upon the NFS provisioner above.
 
 #### Resource Catalogue
 
-The file [`060-resource-catalogue.yaml`](./deploy/060-resource-catalogue.yaml) instantiates the EOEPCA Resource Catalogue.
+The file [`070-resource-catalogue.yaml`](./deploy/070-resource-catalogue.yaml) instantiates the EOEPCA Resource Catalogue.
 
 In this deployment we are assuming a 'closed' deployment that is not externally accessible - and hence is not able to establish TLS certificates via letsencrypt. However, the resource-catalogue helm charts insist on configuring tls, which is not what we want in this case. Hence, we disable the helm chart ingress creation, and instead create our own ingress that is http only.
 
 > NOTE<br>
-> The file `060-resource-catalogue.yaml` must be edited to set the correct domain for your deployment within the service and ingress definition.
+> The file `070-resource-catalogue.yaml` must be edited to set the correct domain for your deployment within the service and ingress definition. In this case it has been initialised with the value `172-26-59-13.nip.io` that resolves to the IP address of the 'accessible' node within the TPZ-UK cluster.
