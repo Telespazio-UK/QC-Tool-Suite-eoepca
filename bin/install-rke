@@ -11,7 +11,7 @@ trap onExit EXIT
 
 mkdir -p $HOME/.local/bin
 
-VERSION="v1.3.13"
+VERSION="v1.3.18"
 # VERSION="v1.4.2"
 # VERSION="latest"
 

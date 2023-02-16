@@ -33,3 +33,6 @@ spec:
     controller:
       config:
         ssl-redirect: false
+      service:
+        externalIPs:
+          - 172.26.59.13

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+ORIG_DIR="$(pwd)"
+cd "$(dirname "$0")"
+BIN_DIR="$(pwd)"
+
+onExit() {
+  cd "${ORIG_DIR}"
+}
+trap onExit EXIT
+
+for host in 10 11 12 13; do
+  hostip="172.26.59.${host}"
+  echo "Host ${hostip}..."
+  ssh rke@${hostip} sudo systemctl stop docker
+  ssh rke@${hostip} docker system prune -f
+  ssh rke@${hostip} docker ps -a
+  # ssh rke@${hostip} sudo reboot now
+done

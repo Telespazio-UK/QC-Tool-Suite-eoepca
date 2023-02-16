@@ -11,34 +11,34 @@ onExit() {
 trap onExit EXIT
 
 main() {
+  action="${1:-up}"
   rke_config
-  rke up
+  rke "${action}"
   summary
 }
 
 rke_config() {
   cat - <<EOF >cluster.yml
 cluster_name: qctools
-kubernetes_version: "v1.22.11-rancher1-1"
+kubernetes_version: "v1.22.17-rancher1-1"
 nodes:
   - address: 172.26.59.13
     user: rke
     role:
       - controlplane
       - etcd
-      - worker
   - address: 172.26.59.10
     user: rke
     role:
       - worker
-  - address: 172.26.59.11
-    user: rke
-    role:
-      - worker
-  - address: 172.26.59.12
-    user: rke
-    role:
-      - worker
+  # - address: 172.26.59.11
+  #   user: rke
+  #   role:
+  #     - worker
+  # - address: 172.26.59.12
+  #   user: rke
+  #   role:
+  #     - worker
 
 ingress:
   provider: none
