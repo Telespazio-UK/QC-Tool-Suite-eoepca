@@ -31,14 +31,14 @@ nodes:
     user: rke
     role:
       - worker
-  # - address: 172.26.59.11
-  #   user: rke
-  #   role:
-  #     - worker
-  # - address: 172.26.59.12
-  #   user: rke
-  #   role:
-  #     - worker
+  - address: 172.26.59.11
+    user: rke
+    role:
+      - worker
+  - address: 172.26.59.12
+    user: rke
+    role:
+      - worker
 
 ingress:
   provider: none
