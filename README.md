@@ -5,6 +5,7 @@ Deployment of selected EOEPCA components to TPZ-UK internal cluster.
 - [eoepca-flux](#eoepca-flux)
   - [Accessing from TPZ-UK Dev VM](#accessing-from-tpz-uk-dev-vm)
   - [Prerequisite Tooling](#prerequisite-tooling)
+    - [Versions](#versions)
   - [Deployment](#deployment)
     - [Kubernetes Cluster](#kubernetes-cluster)
     - [Loadbalancer](#loadbalancer)
@@ -19,37 +20,31 @@ Deployment of selected EOEPCA components to TPZ-UK internal cluster.
 
 ## Accessing from TPZ-UK Dev VM
 
-The cluster comprises 4 nodes - only one (`172.26.59.13`) is accessible from the TPZ-UK dev VM network - and only via SSH...
+The cluster comprises 4 nodes that are accessible via SSH, and only from the TPZ-UK dev VM network.
 
 * `172.26.59.13`
-  * Cluster access node
+  * Cluster admin node
   * NFS server
-  * Cluster roles: master, worker
+  * Cluster roles: master
 * `172.26.59.10`
-  * Accessible only from `172.26.59.13`
   * Cluster roles: worker
 * `172.26.59.11`
-  * Accessible only from `172.26.59.13`
   * Cluster roles: worker
 * `172.26.59.12`
-  * Accessible only from `172.26.59.13`
   * Cluster roles: worker
 
-**Thus, all interactions with the cluster are made via node `172.26.59.13`. Specifically the steps described in this README are performed on the node `172.26.59.13`.**
+The node `172.26.59.13` is designated as the 'admin' node that is used to establish and manage the cluster.
+
+> **Thus, all interactions with the cluster are made via node `172.26.59.13`. Specifically the steps described in this README are performed on the node `172.26.59.13`.**
 
 Connection is via SSH...
 ```
-ssh -X rke@172.26.59.13
+ssh rke@172.26.59.13
 ```
 
-Use of the option `-X` allows the browser to be invoked on this access VM, and displayed on the connecting dev VM. This is necessary to establish a browser session that is able to connect to the cluster services, _(since the VM `172.26.59.13` does not allow traffic on `http` ports)_.
+The IP address `172.26.59.13` is designated as the 'public' IP address of the deployment, and is thus assigned to the `ingress-nginx` (reverse proxy) through which all web services are exposed. Thus, in the absence of proper DNS, the published web services are accessed under the domain `.172-26-59-13.nip.io`.
 
-For example... (from your dev VM)
-```
-ssh -X rke@172.26.59.13 google-chrome
-```
-
-This browser instance can then be used to interact with the web services of the cluster deployment.
+Therefore, in addition to `ssh`, the node `172.26.59.13` also exposes ports 80/443 for `HTTP` traffic from the dev VM network.
 
 ## Prerequisite Tooling
 
@@ -84,6 +79,23 @@ The deployment relies upon the following prerequisite tooling, with supporting s
 
 Use the scripts to install the tooling as required.
 
+### Versions
+
+EOEPCA currently targets Kubernetes `v1.22.x`.
+
+**`rke`**
+
+Kubernetes version `1.22.x` has been dropped in the most recent versions of `rke`.
+
+The latest version of `rke` with support for Kubernetes `v1.22.x` is rke version `v1.3.18`.
+
+**`ingress-nginx`**
+
+Support for Kubernetes version `1.22.x` was dropped in version `4.5.0` of `ingress-nginx`.
+
+Thus, the `ingress-nginx` component is installed with the version selector `"<4.5.0"` - indicating the latest version up to, but not including, version `4.5.0`.
+
+
 ## Deployment
 
 _On the node `172.26.59.13`_
@@ -111,28 +123,19 @@ This can be placed in your `${HOME}/.bashrc` file.
 
 ### Loadbalancer
 
-> NOTE<br>
-> This step can be skipped if you already have a Loadbalancer - e.g. provided by your cloud environment - or you have a another means of establishing the 'access' IP to your cluster.
+Attempts were made to use the `metalb` load-balancer. However, this apperars to not play nicely with the TPZ-UK VM solution.
 
-The script [`020-loadbalancer`](./020-loadbalancer) deploys the metallb loadbalancer into the cluster - configured with an address pool that comprises the IP address of the node `172.26.59.13` in the cluster - this node, importantly, being the only one that is accessible from the TPZ-UK dev VM network.
+Thus, as an alternative, we specify directly the _external IP address_ to be used by the `ingress-nginx` _Ingress Controller_ that provides the public web service endpoint of the cluster. For this we use the IP address of the node `172.26.59.13`...
 
-This IP will be assigned to the `ingress-nginx` component within the cluster, through which all published cluster services will be exposed. Thus, a 'public' IP is presented by the cluster that is, at least, accessible from the dev VMs that can run a browser.
-
-```bash
-./020-loadbalancer
+```
+  values:
+    controller:
+      service:
+        externalIPs:
+          - 172.26.59.13
 ```
 
-The resultant domain through which the cluster public services are accessed is `172-26-59-13.nip.io` which resolves to the 'accessible' VM of the TPZ-UK cluster - e.g. `my-service.172-26-59-13.nip.io`.
-
-> NOTE<br>
-> For a custom configuration, the script must be edited to set your cluster access IP address...
-> ```
-> spec:
->   addresses:
->     - <cluster-access-ip>/32  # or <ip-range-start>-<ip-range-end>
-> ```
->
-> Alternatively the `LB_ADDRESSES` environment variable can be set to configure the script.
+The resultant domain through which the cluster public services are accessed is `172-26-59-13.nip.io` which resolves to the `172.26.59.13` VM of the TPZ-UK cluster - e.g. `my-service.172-26-59-13.nip.io`.
 
 ### Flux GitOps
 
@@ -158,7 +161,7 @@ The following subsections describe each element of the flux GitOps deployment.
 
 #### Ingress Nginx
 
-The file [`010-ingress-nginx.yaml`](./deploy/010-ingress-nginx.yaml) uses helm to deploy the `ingress-nginx` reverse proxy - which relies upon the loadbalancer to provide the IP address upon which the service listens. This represents the 'public' point of access to the deployed system.
+The file [`010-ingress-nginx.yaml`](./deploy/010-ingress-nginx.yaml) uses helm to deploy the `ingress-nginx` reverse proxy - which relies upon the specified `externalIP` to provide the IP address upon which the service listens. This represents the 'public' point of access to the deployed system.
 
 The following elements are defined:
 * **`Namespace`** - into which the `ingress-nginx` components are instantiated
@@ -172,6 +175,9 @@ In this deployment we are assuming a 'closed' deployment that is not externally 
     controller:
       config:
         ssl-redirect: false
+      service:
+        externalIPs:
+          - 172.26.59.13
 ```
 
 #### Namespaces
@@ -219,7 +225,7 @@ The file [`070-resource-catalogue.yaml`](./deploy/070-resource-catalogue.yaml) i
 In this deployment we are assuming a 'closed' deployment that is not externally accessible - and hence is not able to establish TLS certificates via letsencrypt. However, the resource-catalogue helm charts insist on configuring tls, which is not what we want in this case. Hence, we disable the helm chart ingress creation, and instead create our own ingress that is http only.
 
 > NOTE<br>
-> The file `070-resource-catalogue.yaml` must be edited to set the correct domain for your deployment within the service and ingress definition. In this case it has been initialised with the value `172-26-59-13.nip.io` that resolves to the IP address of the 'accessible' node within the TPZ-UK cluster.
+> The file `070-resource-catalogue.yaml` must be edited to set the correct domain for your deployment within the service and ingress definition. In this case it has been initialised with the value `172-26-59-13.nip.io` that resolves to the 'external' IP address assigned to the `ingress-nginx` service within the TPZ-UK cluster.
 
 ## Load Records into Resource Catalogue
 
