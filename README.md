@@ -137,6 +137,8 @@ Thus, as an alternative, we specify directly the _external IP address_ to be use
 
 The resultant domain through which the cluster public services are accessed is `172-26-59-13.nip.io` which resolves to the `172.26.59.13` VM of the TPZ-UK cluster - e.g. `my-service.172-26-59-13.nip.io`.
 
+> **Thus, use of the script `020-loadbalancer`, which deploys the `metallb` load-balancer, is not required here.**
+
 ### Flux GitOps
 
 The script [`030-flux`](./030-flux) bootstraps flux CI/CD into the Kubernetes cluster.

@@ -9,6 +9,13 @@ onExit() {
 }
 trap onExit EXIT
 
+cat - <<EOF
+DO NOT use the metallb load-balancer as it does not play nicely with the TPZ-UK VM network
+It is not needed as the 'externalIP' of the ingress-nginx is set directly
+Aborting...
+EOF
+exit 1
+
 # export LB_ADDRESSES="${LB_ADDRESSES:-$(minikube ip)/32}"
 export LB_ADDRESSES="172.26.59.13/32"
 
