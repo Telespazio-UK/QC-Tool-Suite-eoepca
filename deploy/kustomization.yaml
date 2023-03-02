@@ -12,3 +12,4 @@ resources:
   # - 075-resource-catalogue-guard.yaml
   # - 080-data-access.yaml
   # - 085-data-access-guard.yaml
+  - 090-ades.yaml
