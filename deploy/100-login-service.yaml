@@ -13,11 +13,17 @@ spec:
         name: eoepca
         namespace: common
   values:
+    global:
+      namespace: um
+      domain: auth.185-52-193-246.nip.io
+      nginxIp: 185.52.193.246
     volumeClaim:
       name: eoepca-userman-pvc
       create: false
     config:
       domain: auth.185-52-193-246.nip.io
+      # adminPass: ${LOGIN_SERVICE_ADMIN_PASSWORD}
+      # ldapPass: ${LOGIN_SERVICE_ADMIN_PASSWORD}
       volumeClaim:
         name: eoepca-userman-pvc
     opendj:
@@ -33,14 +39,14 @@ spec:
     oxtrust:
       volumeClaim:
         name: eoepca-userman-pvc
-    global:
-      domain: auth.185-52-193-246.nip.io
-      nginxIp: 185.52.193.246
-      namespace: um
     nginx:
       ingress:
+        enabled: true
         annotations:
+          kubernetes.io/ingress.class: nginx
+          # nginx.ingress.kubernetes.io/ssl-redirect: "false"
           cert-manager.io/cluster-issuer: letsencrypt
+        path: /
         hosts:
           - auth.185-52-193-246.nip.io
         tls:
