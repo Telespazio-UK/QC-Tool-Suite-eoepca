@@ -14,3 +14,4 @@ resources:
   # - 080-data-access.yaml
   # - 085-data-access-guard.yaml
   - 090-ades.yaml
+  - 100-login-service.yaml
