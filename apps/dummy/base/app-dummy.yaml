@@ -29,13 +29,13 @@ spec:
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             cert-manager.io/cluster-issuer: letsencrypt
           hosts:
-            - host: dummy-service-open.185-52-193-246.nip.io
+            - host: dummy-service-openz.185-52-193-246.nip.io
               paths:
                 - path: /
                   pathType: ImplementationSpecific
           tls:
             - hosts:
-                - dummy-service-open.185-52-193-246.nip.io
+                - dummy-service-openz.185-52-193-246.nip.io
               secretName: dummy-service-open-tls
 
   # Destination cluster and namespace to deploy the application
