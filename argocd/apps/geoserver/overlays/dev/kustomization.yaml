@@ -5,8 +5,9 @@ resources:
 patches:
   - patch: |-
       - op: replace
-        path: /metadata/name
-        value: larry
+        path: /spec/source/targetRevision
+        value: 1.0.1
     target:
-      kind: Namespace
-      name: fred
+      group: argoproj.io
+      kind: Application
+      name: geoserver

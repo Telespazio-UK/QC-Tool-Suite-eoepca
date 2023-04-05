@@ -1,15 +1,15 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dummy
+  name: geoserver
   namespace: argocd
   labels:
-    name: dummy
+    name: geoserver
 spec:
   # The project the application belongs to.
   project: default
 
-  # Source of the application manifestsapp-dummy
+  # Source of the application manifests
   source:
     repoURL: https://eoepca.github.io/helm-charts-dev/  # Can point to either a Helm chart repo or a git repo.
     targetRevision: 1.0.1  # For Helm, this refers to the chart version.
@@ -18,7 +18,7 @@ spec:
     chart: dummy  # Set this when pulling directly from a Helm repo. DO NOT set for git-hosted Helm charts.
     helm:
       # Release name override (defaults to application name)
-      releaseName: dummy-service
+      releaseName: geoserver
       # Values file as block file
       values: |
         ingress:
@@ -29,14 +29,14 @@ spec:
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             cert-manager.io/cluster-issuer: letsencrypt
           hosts:
-            - host: dummy-service-openz.185-52-193-246.nip.io
+            - host: geoserver.185-52-193-246.nip.io
               paths:
                 - path: /
                   pathType: ImplementationSpecific
           tls:
             - hosts:
-                - dummy-service-openz.185-52-193-246.nip.io
-              secretName: dummy-service-open-tls
+                - geoserver.185-52-193-246.nip.io
+              secretName: geoserver-service-open-tls
 
   # Destination cluster and namespace to deploy the application
   destination:
@@ -45,7 +45,7 @@ spec:
     # or cluster name
     # name: in-cluster
     # The namespace will only be set for namespace-scoped resources that have not set a value for .metadata.namespace
-    namespace: test
+    namespace: tpzuk
 
   # Sync policy
   syncPolicy:
