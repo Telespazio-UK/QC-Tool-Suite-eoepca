@@ -3,23 +3,18 @@ kind: Kustomization
 resources:
   - ../../base
 patches:
-  - patch: |-
-      - op: replace
-        path: /spec/source/targetRevision
-        value: 1.0.1
-    target:
+  - target:
       group: argoproj.io
       kind: Application
       name: geoserver
-  - patch: |-
+    patch: |-
+      - op: add
+        path: /spec/source/targetRevision
+        value: 1.0.1
       - op: add
         path: /spec/source/helm/parameters
         value:
           - name: "ingress.hosts[0].host"
-            value: geoserverxyz.185-52-193-246.nip.io
+            value: geoserver123.185-52-193-246.nip.io
           - name: "ingress.tls[0].hosts[0]"
-            value: geoserverxyz.185-52-193-246.nip.io
-    target:
-      group: argoproj.io
-      kind: Application
-      name: geoserver
+            value: geoserver123.185-52-193-246.nip.io
