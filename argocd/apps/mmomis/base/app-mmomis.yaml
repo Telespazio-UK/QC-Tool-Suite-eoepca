@@ -7,12 +7,12 @@ metadata:
     name: mmomis
 spec:
   # The project the application belongs to.
-  project: default
+  project: TBD
 
   # Source of the application manifests
   source:
     repoURL: https://raw.githubusercontent.com/TPZDSP3/tpz-charts/main/  # Can point to either a Helm chart repo or a git repo.
-    targetRevision: 0.1.0  # For Helm, this refers to the chart version.
+    targetRevision: TBD  # For Helm, this refers to the chart version.
 
     # helm specific config
     chart: marine-water  # Set this when pulling directly from a Helm repo. DO NOT set for git-hosted Helm charts.
@@ -21,16 +21,18 @@ spec:
       releaseName: mmomis
       # Values file as block file
       values: |
+        image:
+          tag: TBD
         ingress:
           enabled: true
           hosts:
-            - host: mmomis.domain
+            - host: mmomis.domain.TBD
               paths:
                 - path: /
                   pathType: Prefix
           tls:
             - hosts:
-                - mmomis.domain
+                - mmomis.domain.TBD
               secretName: mmomis-tls
 
   # Destination cluster and namespace to deploy the application
