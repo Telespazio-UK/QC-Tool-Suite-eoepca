@@ -23,7 +23,7 @@ spec:
       parameters:
       - name: "ingress.hosts[0].host"
         value: geoserverzzz.185-52-193-246.nip.io
-      - name: "ingress.tls.hosts[0][0]"
+      - name: "ingress.tls[0].hosts[0]"
         value: geoserverzzz.185-52-193-246.nip.io
       # Values file as block file
       values: |
