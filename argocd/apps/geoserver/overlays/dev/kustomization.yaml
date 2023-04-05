@@ -3,23 +3,19 @@ kind: Kustomization
 bases:
   - ../../base
 # namePrefix: dev-
-patches:
-  - target:
-      group: argoproj.io
-      kind: Application
-      name: geoserver
-    patch: |-
-      apiVersion: argoproj.io/v1alpha1
-      kind: Application
-      metadata:
-        name: geoserver
-        namespace: argocd
-      spec:
-        source:
-          targetRevision: 1.0.1
-          helm:
-            parameters:
-              - name: "ingress.hosts[0].host"
-                value: geoserver456.185-52-193-246.nip.io
-              - name: "ingress.tls[0].hosts[0]"
-                value: geoserver456.185-52-193-246.nip.io
+patchesStrategicMerge:
+- |-
+  apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    name: geoserver
+    namespace: argocd
+  spec:
+    source:
+      targetRevision: 1.0.1
+      helm:
+        parameters:
+          - name: "ingress.hosts[0].host"
+            value: geoserver456.185-52-193-246.nip.io
+          - name: "ingress.tls[0].hosts[0]"
+            value: geoserver456.185-52-193-246.nip.io
