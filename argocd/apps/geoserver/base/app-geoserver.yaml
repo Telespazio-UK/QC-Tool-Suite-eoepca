@@ -22,9 +22,9 @@ spec:
       # Extra parameters to set (same as setting through values.yaml, but these take precedence)
       parameters:
       - name: "ingress.hosts[0].host"
-        value: geoserver.185-52-193-246.nip.io
+        value: geoserverzzz.185-52-193-246.nip.io
       - name: "ingress.tls.hosts[0]"
-        value: geoserver.185-52-193-246.nip.io
+        value: geoserverzzz.185-52-193-246.nip.io
       # Values file as block file
       values: |
         ingress:
