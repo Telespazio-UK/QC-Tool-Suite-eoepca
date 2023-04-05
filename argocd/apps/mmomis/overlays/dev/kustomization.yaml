@@ -1,27 +1,27 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 # Inherit from base
-bases:
-  - ../../base
+resources:
+- ../../base
 # Just override (patch) a few deployment-specific values
-patchesStrategicMerge:
-- |-
-  apiVersion: argoproj.io/v1alpha1
-  kind: Application
-  metadata:
-    name: mmomis
-    namespace: argocd
-  spec:
-    project: default
-    source:
-      targetRevision: 0.1.0
-      helm:
-        parameters:
-          - name: "image.tag"
-            value: 20230403HEAD
-          - name: "ingress.hosts[0].host"
-            value: explore-marine-plans.185-52-193-246.nip.io
-          - name: "ingress.tls[0].hosts[0]"
-            value: explore-marine-plans.185-52-193-246.nip.io
-          - name: "ingress.annotations.cert-manager.io/cluster-issuer"
-            value: letsencrypt
+patches:
+- patch: |-
+    apiVersion: argoproj.io/v1alpha1
+    kind: Application
+    metadata:
+      name: mmomis
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        targetRevision: 0.1.0
+        helm:
+          parameters:
+            - name: "image.tag"
+              value: 20230403HEAD
+            - name: "ingress.hosts[0].host"
+              value: explore-marine-plans.185-52-193-246.nip.io
+            - name: "ingress.tls[0].hosts[0]"
+              value: explore-marine-plans.185-52-193-246.nip.io
+            - name: "ingress.annotations.cert-manager.io/cluster-issuer"
+              value: letsencrypt
