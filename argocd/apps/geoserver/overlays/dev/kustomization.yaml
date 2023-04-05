@@ -9,6 +9,11 @@ patches:
       kind: Application
       name: geoserver
     patch: |-
+      apiVersion: argoproj.io/v1alpha1
+      kind: Application
+      metadata:
+        name: geoserver
+        namespace: argocd
       spec:
         source:
           targetRevision: 1.0.1
