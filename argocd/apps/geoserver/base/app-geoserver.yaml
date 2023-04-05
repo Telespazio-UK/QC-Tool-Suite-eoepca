@@ -29,13 +29,13 @@ spec:
             nginx.ingress.kubernetes.io/ssl-redirect: "false"
             cert-manager.io/cluster-issuer: letsencrypt
           hosts:
-            - host: geoserverx.185-52-193-246.nip.io
+            - host: geoserver.185-52-193-246.nip.io
               paths:
                 - path: /
                   pathType: ImplementationSpecific
           tls:
             - hosts:
-                - geoserverx.185-52-193-246.nip.io
+                - geoserver.185-52-193-246.nip.io
               secretName: geoserver-service-open-tls
 
   # Destination cluster and namespace to deploy the application
