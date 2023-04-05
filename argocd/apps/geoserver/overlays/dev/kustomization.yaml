@@ -9,13 +9,12 @@ patches:
       kind: Application
       name: geoserver
     patch: |-
-      - op: add
-        path: /spec/source/targetRevision
-        value: 1.0.1
-      - op: add
-        path: /spec/source/helm/parameters
-        value:
-          - name: "ingress.hosts[0].host"
-            value: geoserver456.185-52-193-246.nip.io
-          - name: "ingress.tls[0].hosts[0]"
-            value: geoserver456.185-52-193-246.nip.io
+      spec:
+        source:
+          targetRevision: 1.0.1
+          helm:
+            parameters:
+              - name: "ingress.hosts[0].host"
+                value: geoserver456.185-52-193-246.nip.io
+              - name: "ingress.tls[0].hosts[0]"
+                value: geoserver456.185-52-193-246.nip.io
