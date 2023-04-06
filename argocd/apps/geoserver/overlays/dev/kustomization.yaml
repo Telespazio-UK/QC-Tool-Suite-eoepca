@@ -18,6 +18,6 @@ patchesStrategicMerge:
       helm:
         parameters:
           - name: "ingress.hosts[0].host"
-            value: geoserver.185-52-193-246.nip.io
+            value: geoserver.dsp3.185-52-193-246.nip.io
           - name: "ingress.tls[0].hosts[0]"
-            value: geoserver.185-52-193-246.nip.io
+            value: geoserver.dsp3.185-52-193-246.nip.io
