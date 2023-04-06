@@ -23,6 +23,8 @@ spec:
       values: |
         image:
           tag: TBD
+        imagePullSecrets:
+          - tpzuk-azure-registry
         ingress:
           enabled: true
           hosts:
