@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+
+ORIG_DIR="$(pwd)"
+cd "$(dirname "$0")"
+BIN_DIR="$(pwd)"
+
+onExit() {
+  cd "${ORIG_DIR}"
+}
+trap onExit EXIT
+
+main() {
+  installArgo
+  setupIngress
+  showArgoCredentials
+
+  argocd login grpc.argocd.185-52-193-246.nip.io --username admin --password "$(password)" --insecure
+
+  # argocd app create guestbook --repo https://github.com/argoproj/argocd-example-apps.git --path guestbook --dest-server https://kubernetes.default.svc --dest-namespace default
+  # argocd app get guestbook
+  # argocd app sync guestbook
+}
+
+# install ArgoCD
+installArgo() {
+  kubectl create namespace argocd
+  kubectl -n argocd apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+}
+
+# setup the Argo ingress
+setupIngress() {
+  # apply patch to deploy/argocd-server for ingress
+  kubectl -n argocd patch deploy/argocd-server --patch "$(patchForIngress)"
+  # apply the ingress yaml
+  ingressYaml | kubectl -n argocd apply -f -
+}
+
+# print argo admin credentials to stdout
+showArgoCredentials() {
+  echo -e "\nCredentials for Argo CD => username: admin, password: $(password)\n"
+}
+
+# patch the argocd-server to `--insecure` mode
+patchForIngress() {
+  cat - <<EOF
+spec:
+  template:
+    spec:
+      containers:
+        - name: argocd-server
+          command:
+            - argocd-server
+            - --repo-server
+            - argocd-repo-server:8081
+            - --insecure
+EOF
+}
+
+password() {
+  kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+}
+
+# Argo CD ingress yaml
+ingressYaml() {
+  cat - <<EOF
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-http-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: argocd-server
+                port:
+                  name: http
+            pathType: ImplementationSpecific
+      host: argocd.185-52-193-246.nip.io
+  tls:
+    - hosts:
+        - argocd.185-52-193-246.nip.io
+      secretName: argocd-secret # do not change, this is provided by Argo CD
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-grpc-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: argocd-server
+                port:
+                  name: http
+            pathType: ImplementationSpecific
+      host: grpc.argocd.185-52-193-246.nip.io
+  tls:
+    - hosts:
+        - grpc.argocd.185-52-193-246.nip.io
+      secretName: argocd-secret # do not change, this is provided by Argo CD
+EOF
+}
+
+main
