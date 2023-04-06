@@ -23,7 +23,5 @@ patches:
               value: explore-marine-plans.185-52-193-246.nip.io
             - name: "ingress.tls[0].hosts[0]"
               value: explore-marine-plans.185-52-193-246.nip.io
-            - name: "ingress.annotations.fred\\.burt/larry"
-              value: bob
-            # - name: "ingress.annotations.cert-manager.io\/cluster-issuer"
-            #   value: letsencrypt
+            - name: "ingress.annotations.cert-manager\\.io/cluster-issuer"
+              value: letsencrypt
