@@ -3,6 +3,7 @@ kind: Kustomization
 # Inherit from base
 resources:
 - ../../base
+- ss-tpzuk-azure-registry.yaml
 # Just override (patch) a few deployment-specific values
 patches:
 - patch: |-

@@ -1,0 +1,17 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: tpzuk-azure-registry
+  namespace: tpzuk
+spec:
+  encryptedData:
+    .dockerconfigjson: AgBw6PzRWsBbBT9qlTSF6IwrHX6lukjpCdFaOusSCUMqU89bgMJtaRRAMmTpk8BOH7OcO4LoEWEZuXezzxtko4zYyRGcgWzJLtn9EGh/YYWrvk50hMzWBPt9QjVYsBtKstxqDhR76BrdLI1uPynnzA6P2tySAopNbo4RoHmYnEZJVwxeP3amMZhdMB/SCCh8ResMZCe2NJgbIOv8FNyLw9sMgD4u1CAaeGG0SpzZx8kSoLia7yqwPnbRAzt65mzJvKvQwr31etjOGQ0wzFWUkjtTzgIa/dmPNOg/kJBgpbs3g3pv0IJggPbRlQxOwxCOCTxzzIFsYoVlnuCAvIdsje4hgg3VN8Wx2oxyxIIqZBSpXJb+7/8VeoC1IrR6CpmHilU53xqyXmn61fa03r7AKNYe7xkk33GsLSdJNICzErzpHvmS7XtfkMbhRugvzR2SNM/87hbvH2gNwNiFxgcrAJuMZVyI33wsJDKf1FEcpJ1kxtItxq2p5fUOdCeOA6ODISsSbM+V9p8C1ztblLg319LTCLUh4lYSrPErKilzn1kOgQAS7Lx49RasYZ0Do783ie5nY/rnAvnW3BW9YJ4jDRr07c9iik2SNKjq4TwnNDtacmRFwwqIklYw6c7HuFknxX5aQzSKrwwVZColgZqeUTwB5N5zMlMVAF762EMIn51qYDJCTXsKdV676jl0283cch6njWtJcfi03HfANDv8Zpqg/z1p23TELsV3A3WwVWqHETWUiaCok0ZOCQCjhgJYlLovhi6kvTRM2+y9KPPQZc0AEedGjtjDWdd8vpjG8YDuN/E/2yOmVAU8D8ZrjzNy1nd2hQyDmChDmKviaGmbvTWQMh9FcamSpY0CAXkmCFBEi1qYmgpF1Mb88qkFfqK6m3GncduXEktjsmI9tyZnGkgPQjki/poOBfwF94CWi/tPRFzi5TTwM+NgYnEHTIXzh0N2soEzTJmQjwE/YHSscGq7r+Y1
+  template:
+    data: null
+    metadata:
+      creationTimestamp: null
+      name: tpzuk-azure-registry
+      namespace: tpzuk
+    type: kubernetes.io/dockerconfigjson
+
