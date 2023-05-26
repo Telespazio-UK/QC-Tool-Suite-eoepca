@@ -1,0 +1,70 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: proc-ades
+  namespace: proc
+spec:
+  chart:
+    spec:
+      chart: ades
+      version: 2.0.6
+      sourceRef:
+        kind: HelmRepository
+        name: eoepca
+        namespace: common
+  values:
+    # values - start
+    image:
+      pullPolicy: Always
+    workflowExecutor:
+      inputs:
+        # stage-in
+        STAGEIN_AWS_SERVICEURL: http://data.cloudferro.com
+        STAGEIN_AWS_ACCESS_KEY_ID: test
+        STAGEIN_AWS_SECRET_ACCESS_KEY: test
+        STAGEIN_AWS_REGION: RegionOne
+        # stage-out
+        STAGEOUT_AWS_SERVICEURL: http://minio.172-26-59-13.nip.io
+        STAGEOUT_AWS_ACCESS_KEY_ID: eoepca
+        STAGEOUT_AWS_SECRET_ACCESS_KEY: changeme
+        STAGEOUT_AWS_REGION: us-east-1
+        STAGEOUT_OUTPUT: s3://eoepca
+      # Workspace integration
+      useResourceManager: false
+      resourceManagerWorkspacePrefix: "qctool"
+      resourceManagerEndpoint: "https://workspace-api.172-26-59-13.nip.io"
+      platformDomain: "https://auth.172-26-59-13.nip.io"
+      # Kubernetes storage
+      processingStorageClass: managed-nfs-storage
+      # Size of the Kubernetes Tmp Volumes
+      processingVolumeTmpSize: "6Gi"
+      # Size of the Kubernetes Output Volumes
+      processingVolumeOutputSize: "6Gi"
+      # Max ram to use for a job
+      processingMaxRam: "8Gi"
+      # Max number of CPU cores to use concurrently for a job
+      processingMaxCores: "4"
+    wps:
+      pepBaseUrl: "http://ades-pep:5576"
+      usePep: false
+    persistence:
+      storageClass: managed-nfs-storage-retain
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+        # nginx.ingress.kubernetes.io/use-regex: "true"
+        # nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+        # nginx.ingress.kubernetes.io/rewrite-target: /$1
+      hosts:
+        - host: ades-open.172-26-59-13.nip.io
+          paths: 
+            - path: /
+              pathType: ImplementationSpecific
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+    # values - end
+  interval: 1m0s

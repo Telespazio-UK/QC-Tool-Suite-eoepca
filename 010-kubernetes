@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+ORIG_DIR="$(pwd)"
+cd "$(dirname "$0")"
+BIN_DIR="$(pwd)"
+
+onExit() {
+  cd "${ORIG_DIR}"
+  rm -f cluster.yml
+}
+trap onExit EXIT
+
+main() {
+  action="${1:-up}"
+  rke_config
+  rke "${action}"
+  summary
+}
+
+rke_config() {
+  cat - <<EOF >cluster.yml
+cluster_name: qctools
+kubernetes_version: "v1.22.17-rancher1-1"
+nodes:
+  - address: 172.26.59.13
+    user: rke
+    role:
+      - controlplane
+      - etcd
+  - address: 172.26.59.10
+    user: rke
+    role:
+      - worker
+  - address: 172.26.59.11
+    user: rke
+    role:
+      - worker
+  - address: 172.26.59.12
+    user: rke
+    role:
+      - worker
+
+ingress:
+  provider: none
+
+# private_registries:
+#   # e.g. dockerhub
+#   - user: <username>
+#     password: <password>
+EOF
+}
+
+summary() {
+  cat - <<EOF
+
+The kubeconfig for the new cluster is in the file kube_config_cluster.yml
+Set environment variable KUBECONFIG to point to the new cluster...
+
+  export KUBECONFIG="${PWD}/kube_config_cluster.yml"
+
+This can be placed in your \${HOME}/.bashrc file.
+
+EOF
+}
+
+main "$@"

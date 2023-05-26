@@ -9,4 +9,6 @@ onExit() {
 }
 trap onExit EXIT
 
-minikube start --cpus max --memory 8g --kubernetes-version "v1.22.5"
+mkdir -p $HOME/.local/bin
+
+curl -s https://fluxcd.io/install.sh | sudo bash

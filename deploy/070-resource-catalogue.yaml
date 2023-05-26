@@ -1,0 +1,69 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: resource-catalogue
+  namespace: rm
+spec:
+  interval: 5m 
+  chart:
+    spec:
+      chart: rm-resource-catalogue
+      version: 1.2.2
+      sourceRef:
+        kind: HelmRepository
+        name: eoepca-dev
+        namespace: common
+  values:
+    global:
+      namespace: rm
+    ingress:
+      enabled: true
+      name: resource-catalogue
+      host: resource-catalogue.172-26-59-13.nip.io
+      # subpath_enabled: true
+      # subpath: "/resource-catalogue"
+      # we're not using tls, but the resource-catalogue helm chart insists on
+      # having values anyway - so may as well set consistent values
+      tls_host: resource-catalogue.172-26-59-13.nip.io
+      tls_secret_name: resource-catalogue-tls
+      annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    db:
+      volume_storage_type: managed-nfs-storage-retain
+    pycsw:
+      config:
+        server:
+          url: http://resource-catalogue.172-26-59-13.nip.io/
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: resource-catalogue-open
+#   namespace: rm
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     nginx.ingress.kubernetes.io/enable-cors: "true"
+#     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+#     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+#     nginx.ingress.kubernetes.io/rewrite-target: /$1
+#     nginx.ingress.kubernetes.io/configuration-snippet: |
+#       rewrite ^(/resource-catalogue-open)$ $1/ redirect;
+# spec:
+#   rules:
+#   - host: 185-52-193-246.nip.io
+#     http:
+#       paths:
+#       - path: /resource-catalogue-open/(.*)
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: resource-catalogue-service
+#             port:
+#               number: 80
+#       - path: /resource-catalogue-open$
+#         pathType: Exact
+#         backend:
+#           service:
+#             name: resource-catalogue-service
+#             port:
+#               number: 80

@@ -16,13 +16,12 @@ if [ -z "${GITHUB_USER}" -o -z "${GITHUB_TOKEN}" ]; then
 fi
 
 export GITHUB_REPO="${GITHUB_REPO:-eoepca-flux}"
-export GITHUB_BRANCH="${GITHUB_BRANCH:-main}"
+export GITHUB_BRANCH="${GITHUB_BRANCH:-qctool}"
 export GITHUB_PATH="${GITHUB_PATH:-deploy}"
 
 flux bootstrap github \
+  --token-auth \
   --owner="${GITHUB_USER}" \
   --repository="${GITHUB_REPO}" \
   --branch="${GITHUB_BRANCH}" \
-  --path="${GITHUB_PATH}" \
-  --private=false \
-  --personal=true
+  --path="${GITHUB_PATH}"
