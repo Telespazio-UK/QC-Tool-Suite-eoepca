@@ -1,0 +1,131 @@
+{
+  "stac_version": "1.0.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/ml-model/v1.0.0/schema.json"
+  ],
+  "type": "Feature",
+  "id": "model-item-2",
+  "bbox": [
+    34.18,
+    0.47,
+    34.37,
+    0.71
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          34.18,
+          0.47
+        ],
+        [
+          34.37,
+          0.47
+        ],
+        [
+          34.37,
+          0.71
+        ],
+        [
+          34.18,
+          0.71
+        ],
+        [
+          34.18,
+          0.47
+        ]
+      ]
+    ]
+  },
+  "collection": "containing-collection",
+  "properties": {
+    "datetime": null,
+    "start_datetime": "2020-01-01T00:00:00Z",
+    "end_datetime": "2020-12-12T23:59:59Z",
+    "license": "MIT",
+    "providers": [
+      {
+        "name": "Natural Resources Canada (Charles Authier)",
+        "roles": [
+          "producer"
+        ],
+        "email": "charles.authier@nrcan-rncan.gc.ca",
+        "url": "https://nrcan-rncan.gc.ca"
+      }
+    ],
+    "ml-model:type": "ml-model",
+    "ml-model:learning_approach": "supervised",
+    "ml-model:prediction_type": "object-detection",
+    "ml-model:architecture": "RCNN",
+    "ml-model:training-processor-type": "gpu",
+    "ml-model:training-os": "linux",
+    "ml-model:description": "Detect Road Condition Version 1",
+    "origin": [
+      {
+        "org_name": "Telespazio",
+        "email": "info@telespazio.com",
+        "url": "telespazio.com"
+      }
+    ]
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "Containing Collection"
+    },
+    {
+      "rel": "root",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "Containing Collection"
+    },
+    {
+      "rel": "parent",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "Containing Collection"
+    },
+    {
+      "rel": "ml-model:inferencing-image",
+      "href": "registry.hub.docker.com/my-user/my-inferencing-model:v1",
+      "type": "docker-image",
+      "title": "My Model (v1)"
+    },
+    {
+      "rel": "ml-model:training-image",
+      "href": "registry.hub.docker.com/my-user/my-training-model:v1",
+      "type": "docker-image",
+      "title": "Image for Training Model"
+    },
+    {
+      "rel": "ml-model:train-data",
+      "href": "https://some-domain.com/training-data/collection.json",
+      "type": "application/json",
+      "title": "Training Data"
+    },
+    {
+      "rel": "ml-model:test-data",
+      "href": "https://some-domain.com/test-data/collection.json",
+      "type": "application/json",
+      "title": "Test Data"
+    }
+  ],
+  "assets": {
+    "model": {
+      "href": "./inferencing.yml",
+      "type": "text/x-yaml; application=compose",
+      "title": "Model inferencing runtime",
+      "roles": [
+        "ml-model:inference-runtime"
+      ]
+    },
+    "other": {
+      "href": "https://some-domain.com/another/thing.json",
+      "type": "application/json",
+      "title": "Some other asset"
+    }
+  }
+}

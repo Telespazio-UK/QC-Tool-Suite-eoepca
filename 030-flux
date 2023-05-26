@@ -9,19 +9,13 @@ onExit() {
 }
 trap onExit EXIT
 
-# ensure that env GITHUB_USER and GITHUB_TOKEN are exported
-if [ -z "${GITHUB_USER}" -o -z "${GITHUB_TOKEN}" ]; then
-  echo "ERROR: Both GITHUB_USER and GITHUB_TOKEN must be set"
-  exit 1
-fi
-
-export GITHUB_REPO="${GITHUB_REPO:-eoepca-flux}"
-export GITHUB_BRANCH="${GITHUB_BRANCH:-qctool}"
+export GITHUB_REPO="${GITHUB_REPO:-QC-Tool-Suite-eoepca}"
+export GITHUB_BRANCH="${GITHUB_BRANCH:-main}"
 export GITHUB_PATH="${GITHUB_PATH:-deploy}"
 
 flux bootstrap github \
   --token-auth \
-  --owner="${GITHUB_USER}" \
+  --owner="Telespazio-UK" \
   --repository="${GITHUB_REPO}" \
   --branch="${GITHUB_BRANCH}" \
   --path="${GITHUB_PATH}"
