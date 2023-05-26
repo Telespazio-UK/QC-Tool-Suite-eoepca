@@ -50,7 +50,7 @@ metadata:
   name: demonstrator-client
   namespace: clients
   annotations:
-    kubernetes.io/ingress.class: "{{ .Values.ingress.class }}"
+    kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
