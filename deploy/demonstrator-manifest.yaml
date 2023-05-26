@@ -41,6 +41,29 @@ spec:
   selector:
     bb: web
   ports:
-    - port: 3000
-      targetPort: 3000
-      nodePort: 30001
+    - port: 80
+      targetPort: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demonstrator-client
+  namespace: clients
+  annotations:
+    kubernetes.io/ingress.class: "{{ .Values.ingress.class }}"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: demonstrator-client.172-26-59-13.nip.io
+    http:
+      paths:
+      - path: /demonstrator-client
+        pathType: Prefix
+        backend:
+          service:
+            name: demonstrator-site
+            port:
+              number: 80
