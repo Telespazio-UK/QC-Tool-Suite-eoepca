@@ -23,6 +23,8 @@ spec:
         - name: demonstrator-site
           image: qctool-demonstrator
           imagePullPolicy: Never
+          ports:
+          - containerPort: 8000
           resources:
             limits:
               memory: 512Mi
