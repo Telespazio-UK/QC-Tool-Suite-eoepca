@@ -13,11 +13,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      bb: web
+      io.kompose.service: demonstrator
   template:
     metadata:
       labels:
-        bb: web
+        io.kompose.service: demonstrator
     spec:
       containers:
         - name: demonstrator-site
