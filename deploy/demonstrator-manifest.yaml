@@ -59,8 +59,7 @@ spec:
   - host: demonstrator.172-26-59-13.nip.io
     http:
       paths:
-      - path: /demonstrator
-        pathType: Prefix
+      - pathType: ImplementationSpecific
         backend:
           service:
             name: demonstrator-site
