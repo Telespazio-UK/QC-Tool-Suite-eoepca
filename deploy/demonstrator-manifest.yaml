@@ -37,12 +37,13 @@ metadata:
   name: demonstrator-site
   namespace: clients
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
-    bb: web
+    io.kompose.service: demonstrator
   ports:
     - port: 80
       targetPort: 8000
+      name: http
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
