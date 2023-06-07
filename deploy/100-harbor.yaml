@@ -57,7 +57,7 @@ spec:
         trivy:
           storageClass: standard
 
-    externalURL: https://harbor.172-26-59-13.nip.io
+    externalURL: http://harbor.172-26-59-13.nip.io
     # initial password for logging in with user "admin"
     # harborAdminPassword: "Harbor12345"  # this is the default in the helm chart
 
