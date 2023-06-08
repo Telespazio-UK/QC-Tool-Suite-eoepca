@@ -41,7 +41,7 @@ spec:
       # Size of the Kubernetes Output Volumes
       processingVolumeOutputSize: "6Gi"
       # Max ram to use for a job
-      processingMaxRam: "8Gi"
+      processingMaxRam: "12Gi"
       # Max number of CPU cores to use concurrently for a job
       processingMaxCores: "4"
     wps:
