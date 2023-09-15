@@ -45,17 +45,17 @@ spec:
     persistence:
       persistentVolumeClaim:
         registry:
-          storageClass: standard
+          storageClass: managed-nfs-storage-retain
         chartmuseum:
-          storageClass: standard
+          storageClass: managed-nfs-storage-retain
         jobservice:
-          storageClass: standard
+          storageClass: managed-nfs-storage-retain
         database:
-          storageClass: standard
+          storageClass: managed-nfs-storage-retain
         redis:
-          storageClass: standard
+          storageClass: managed-nfs-storage-retain
         trivy:
-          storageClass: standard
+          storageClass: managed-nfs-storage-retain
 
     externalURL: http://harbor.172-26-59-13.nip.io
     # initial password for logging in with user "admin"
