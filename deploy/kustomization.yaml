@@ -13,5 +13,5 @@ resources:
   # - 080-data-access.yaml
   # - 085-data-access-guard.yaml
   - 090-ades.yaml
-  - 100-harbor.yaml
+  # - 100-harbor.yaml
   - demonstrator-manifest.yaml
