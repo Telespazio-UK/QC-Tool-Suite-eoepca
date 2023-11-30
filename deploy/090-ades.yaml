@@ -24,7 +24,7 @@ spec:
           class: CommandLineTool
           hints:
             DockerRequirement:
-              dockerPull: gr4n0t4/stagein:0.0.1-osc
+              dockerPull: gr4n0t4/stagein:0.0.3-osc
             "cwltool:Secrets":
               secrets:
               - ADES_STAGEIN_AWS_SERVICEURL
